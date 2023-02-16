@@ -21,7 +21,7 @@ const InfoCards = () => {
       bgColor: "bg-accent",
     },
     {
-      id: 1,
+      id: 3,
       name: "Contact us now",
       description: "+88013671000100",
       icon: phone,
