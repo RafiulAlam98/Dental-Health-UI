@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const SignUp = () => {
   const {
     register,
     handleSubmit,
@@ -15,9 +15,24 @@ const Login = () => {
   return (
     <div className="h-[500px] flex justify-center items-center">
       <div className="w-96 p-7">
-        <h2 className="text-4xl text-center">Login</h2>
+        <h2 className="text-4xl text-center">Sign Up</h2>
 
         <form onSubmit={handleSubmit(handleLogin)}>
+          <div className="form-control w-full ">
+            <label className="label">
+              <span className="label-text">What is your name?</span>
+            </label>
+            <input
+              {...register("name", { required: "name is required" })}
+              type="text"
+              className="input input-bordered w-full "
+            />
+            {errors.name && (
+              <p role="alert" className="text-red-600">
+                {errors.name?.message}
+              </p>
+            )}
+          </div>
           <div className="form-control w-full ">
             <label className="label">
               <span className="label-text">What is your email?</span>
@@ -39,11 +54,7 @@ const Login = () => {
             </label>
             <input
               {...register("password", {
-                required: "password is required",
-                minLength: {
-                  value: 6,
-                  message: "password must be 6 characters long",
-                },
+                required: "password must be 6 characters or long",
               })}
               type="password"
               className="input input-bordered w-full "
@@ -60,14 +71,14 @@ const Login = () => {
 
           <input
             type="submit"
-            value="Login"
+            value="Sign Up"
             className="btn w-full btn-accent text-white"
           />
         </form>
         <p>
-          New to Doctor's Portal?
-          <Link to="/signup" className="text-secondary">
-            Create a new account
+          Already have an account?
+          <Link to="/login" className="text-secondary">
+            Login
           </Link>
         </p>
         <div className="divider">OR</div>
@@ -77,4 +88,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
