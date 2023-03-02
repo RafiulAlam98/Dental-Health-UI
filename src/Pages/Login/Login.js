@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider";
 
 const Login = () => {
+  const [loginErr, setLoginErr] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  const { signIn } = useContext(AuthContext);
   const handleLogin = (data) => {
     console.log(data);
+    signIn(data.email, data.password)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setLoginErr(err.message);
+      });
   };
   return (
     <div className="h-[500px] flex justify-center items-center">
@@ -33,6 +43,7 @@ const Login = () => {
               </p>
             )}
           </div>
+
           <div className="form-control w-full ">
             <label className="label">
               <span className="label-text">Password</span>
@@ -43,6 +54,10 @@ const Login = () => {
                 minLength: {
                   value: 6,
                   message: "password must be 6 characters long",
+                },
+                pattern: {
+                  value: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8}/,
+                  message: "password should be strong",
                 },
               })}
               type="password"
@@ -64,8 +79,9 @@ const Login = () => {
             className="btn w-full btn-accent text-white"
           />
         </form>
+        <div>{loginErr && <p className="text-red-600">{loginErr}</p>}</div>
         <p>
-          New to Doctor's Portal?
+          New to Doctor Portal?
           <Link to="/signup" className="text-secondary">
             Create a new account
           </Link>
