@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
 
 const SignUp = () => {
@@ -9,6 +9,9 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  let navigate = useNavigate();
+  let location = useLocation();
+  let from = location.state?.from?.pathname || "/";
 
   const { createUser, updateUser } = useContext(AuthContext);
 
@@ -17,6 +20,7 @@ const SignUp = () => {
     createUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
+        navigate(from, { replace: true });
         const userInfo = {
           displayName: data.name,
         };
