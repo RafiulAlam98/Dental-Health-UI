@@ -13,7 +13,7 @@ const SignUp = () => {
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
 
-  const { createUser, updateUser } = useContext(AuthContext);
+  const { createUser, updateUser, googleLogin } = useContext(AuthContext);
 
   const handleLogin = (data) => {
     console.log(data);
@@ -29,6 +29,18 @@ const SignUp = () => {
           .catch(() => {});
       })
       .catch((err) => console.log(err));
+  };
+
+  const handleGoogleLogin = () => {
+    googleLogin()
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        navigate(from, { replace: true });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <div className="h-[500px] flex justify-center items-center">
@@ -110,7 +122,9 @@ const SignUp = () => {
           </Link>
         </p>
         <div className="divider">OR</div>
-        <button className="btn btn-outline w-full">Continue With Google</button>
+        <button className="btn btn-outline w-full" onClick={handleGoogleLogin}>
+          Continue With Google
+        </button>
       </div>
     </div>
   );
