@@ -16,17 +16,20 @@ const SignUp = () => {
   const { createUser, updateUser, googleLogin } = useContext(AuthContext);
 
   const handleLogin = (data) => {
-    console.log(data);
     createUser(data.email, data.password)
       .then((result) => {
-        console.log(result.user);
-        navigate(from, { replace: true });
+        console.log(result);
+        console.log(data.name);
         const userInfo = {
           displayName: data.name,
         };
         updateUser(userInfo)
-          .then(() => {})
-          .catch(() => {});
+          .then(() => {
+            navigate("/");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => console.log(err));
   };
