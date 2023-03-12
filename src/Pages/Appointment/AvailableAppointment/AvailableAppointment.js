@@ -10,20 +10,25 @@ const AvailableAppointment = ({ selectedDate }) => {
   const [treatment, setTreatment] = useState(null);
   const date = format(selectedDate, "PP");
 
-  const {data:appointmentOptions=[],refetch, isLoading} = useQuery({
-    queryKey:['appointmentOptions',date],
-    queryFn:async() =>{
-      const result =  fetch(`http://localhost:5000/appointmentOptions?date=${date}`)
-      const data = (await result).json()
-      return data
-    }
-  })
+  const {
+    data: appointmentOptions = [],
+    refetch,
+    isLoading,
+  } = useQuery({
+    queryKey: ["appointmentOptions", date],
+    queryFn: async () => {
+      const result = await fetch(
+        `http://localhost:5000/appointmentOptions?date=${date}`
+      );
+      const data = await result.json();
+      return data;
+    },
+  });
 
-  if(isLoading){
-    return <Loading/>
+  if (isLoading) {
+    return <Loading />;
   }
 
-  
   return (
     <section className="my-16 mx-6">
       <p className="text-center text-secondary font-bold">
