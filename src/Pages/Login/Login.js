@@ -2,9 +2,12 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
+import useToken from "../../hooks/useToken";
 
 const Login = () => {
   const [loginErr, setLoginErr] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
+  const [token] = useToken(loginEmail);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -19,8 +22,7 @@ const Login = () => {
     console.log(data);
     signIn(data.email, data.password)
       .then((result) => {
-        console.log(result);
-        navigate(from, { replace: true });
+        setLoginEmail(data.email);
       })
       .catch((err) => {
         console.log(err.message);
@@ -31,14 +33,18 @@ const Login = () => {
   const handleGoogleLogin = () => {
     googleLogin()
       .then((result) => {
-        const user = result.user;
-        console.log(user);
-        navigate(from, { replace: true });
+        const email = result.user.email;
+        console.log(email);
+        setLoginEmail(email);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  if (token) {
+    return navigate(from, { replace: true });
+  }
   return (
     <div className="h-[500px] flex justify-center items-center">
       <div className="w-96 p-7">

@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
+import useToken from "../../hooks/useToken";
 
 const SignUp = () => {
   const {
@@ -12,8 +13,14 @@ const SignUp = () => {
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
+  const [createdEmail, setCreatedEmail] = useState("");
+  const [token] = useToken(createdEmail);
 
   const { createUser, updateUser, googleLogin } = useContext(AuthContext);
+
+  if (token) {
+    return navigate("/");
+  }
 
   const handleLogin = (data) => {
     createUser(data.email, data.password)
@@ -56,20 +63,10 @@ const SignUp = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        getUserToken(email);
+        setCreatedEmail(email);
       });
   };
 
-  const getUserToken = (email) => {
-    fetch(`http://localhost:5000/jwt?email=${email}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.accessToken) {
-          localStorage.setItem("accessToken", data.accessToken);
-          navigate("/");
-        }
-      });
-  };
   return (
     <div className="h-[500px] flex justify-center items-center">
       <div className="w-96 p-7">
