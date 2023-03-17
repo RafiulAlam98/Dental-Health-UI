@@ -11,7 +11,12 @@ const AllUsers = () => {
   } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/users");
+      const res = await fetch("http://localhost:5000/users", {
+        method: "GET",
+        headers: {
+          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
       const data = res.json();
       return data;
     },
@@ -31,6 +36,25 @@ const AllUsers = () => {
         if (data.modifiedCount > 0) {
           toast.success("Make Admin Successfully");
           return refetch();
+        }
+      });
+  };
+
+  const handleUserDelete = (id) => {
+    console.log(id);
+    fetch(`http://localhost:5000/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+        authorization: `bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.deletedCount > 0) {
+          toast.success("user deleted successfully");
+          refetch();
         }
       });
   };
@@ -70,7 +94,11 @@ const AllUsers = () => {
                     )}
                   </td>
                   <td>
-                    <button className="btn btn-xs text-white btn-danger">
+                    <button
+                      const
+                      onClick={() => handleUserDelete(allUser._id)}
+                      className="btn btn-xs text-white btn-danger"
+                    >
                       Delete
                     </button>
                   </td>

@@ -15,7 +15,6 @@ const BookingModal = ({ treatment, selectedDate, setTreatment, refetch }) => {
     const userName = form.username.value;
     const phone = form.phone.value;
     const email = form.email.value;
- 
 
     const booking = {
       appointmentDate: date,
@@ -42,7 +41,7 @@ const BookingModal = ({ treatment, selectedDate, setTreatment, refetch }) => {
           refetch();
         } else {
           setTreatment(null);
-          toast.error(data.message);
+          toast.error(data.message`for ${booking.name}`);
         }
       });
   };
@@ -97,7 +96,6 @@ const BookingModal = ({ treatment, selectedDate, setTreatment, refetch }) => {
               type="email"
               defaultValue={user?.email}
               disabled
-              placeholder="Type here your email"
               className="input w-full "
             />
             <input
@@ -105,6 +103,7 @@ const BookingModal = ({ treatment, selectedDate, setTreatment, refetch }) => {
               type="text"
               placeholder="Type here your phone"
               className="input w-full "
+              required
             />
             <input
               type="submit"

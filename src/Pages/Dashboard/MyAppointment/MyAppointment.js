@@ -21,20 +21,7 @@ const MyAppointment = () => {
     },
   });
 
-const { data: paymentData = [] } = useQuery({
-  queryKey: ["payment"],
-  queryFn: async () => {
-    const res = await fetch("http://localhost:5000/payment", {
-      method: "GET",
-      headers: {
-        authorization: `bearer ${localStorage.getItem("accessToken")}`,
-      },
-    });
-    const data = await res.json();
-    return data;
-  },
-});
-console.log(bookings);
+
 
 if (isLoading) {
   return <Loading />;
@@ -74,7 +61,7 @@ return (
                     </Link>
                   )}
                   {booking.price && booking.paid && (
-                    <span className="text-success">Paid</span>
+                    <span className="text-green-500">Paid</span>
                   )}
                 </td>
               </tr>

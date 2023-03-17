@@ -23,10 +23,8 @@ const SignUp = () => {
   }
 
   const handleLogin = (data) => {
-    console.log(data.password);
     createUser(data.email, data.password)
       .then((result) => {
-        console.log(result);
         const userInfo = {
           displayName: data.name,
         };
@@ -64,7 +62,6 @@ const SignUp = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setCreatedEmail(email);
       });
   };
