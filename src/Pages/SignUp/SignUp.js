@@ -23,8 +23,10 @@ const SignUp = () => {
   }
 
   const handleLogin = (data) => {
+    console.log(data.password);
     createUser(data.email, data.password)
       .then((result) => {
+        console.log(result);
         const userInfo = {
           displayName: data.name,
         };
@@ -109,7 +111,7 @@ const SignUp = () => {
               <span className="label-text">Password</span>
             </label>
             <input
-              {...register("speciality", {
+              {...register("password", {
                 required: "password is required",
                 minLength: {
                   value: 6,
