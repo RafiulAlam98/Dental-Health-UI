@@ -15,7 +15,7 @@ const BookingModal = ({ treatment, selectedDate, setTreatment, refetch }) => {
     const userName = form.username.value;
     const phone = form.phone.value;
     const email = form.email.value;
-    console.log(email);
+ 
 
     const booking = {
       appointmentDate: date,
@@ -26,7 +26,6 @@ const BookingModal = ({ treatment, selectedDate, setTreatment, refetch }) => {
       phone,
       price,
     };
-    console.log(booking);
 
     fetch("http://localhost:5000/bookings", {
       method: "POST",
@@ -37,7 +36,6 @@ const BookingModal = ({ treatment, selectedDate, setTreatment, refetch }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.acknowledged === true) {
           setTreatment(null);
           toast.success("Booking Confirmed");

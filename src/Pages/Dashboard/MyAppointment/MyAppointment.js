@@ -21,55 +21,70 @@ const MyAppointment = () => {
     },
   });
 
-  if (isLoading) {
-    return <Loading />;
-  }
+const { data: paymentData = [] } = useQuery({
+  queryKey: ["payment"],
+  queryFn: async () => {
+    const res = await fetch("http://localhost:5000/payment", {
+      method: "GET",
+      headers: {
+        authorization: `bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    const data = await res.json();
+    return data;
+  },
+});
+console.log(bookings);
 
-  return (
-    <div>
-      <h3 className="text-3xl mb-3">My Appointments</h3>
-      <div className="overflow-x-auto">
-        <table className="table w-full">
-          {/* head */}
-          <thead>
-            <tr>
-              <th></th>
-              <th>Name</th>
-              <th>treatment</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Payment</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookings?.map((booking, i) => {
-              return (
-                <tr key={booking._id}>
-                  <th>{i + 1}</th>
-                  <td>{booking.patient}</td>
-                  <td>{booking.treatment}</td>
-                  <td>{booking.appointmentDate}</td>
-                  <td>{booking.slot}</td>
-                  <td>
-                    {booking.price && !booking.paid && (
-                      <Link to={`/dashboard/payment/${booking.email}`}>
-                        <button className="btn btn-primary text-white btn-sm">
-                          Pay
-                        </button>
-                      </Link>
-                    )}
-                    {booking.price && booking.paid && (
-                      <span className="text-success">Paid</span>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+if (isLoading) {
+  return <Loading />;
+}
+
+return (
+  <div>
+    <h3 className="text-3xl mb-3">My Appointments</h3>
+    <div className="overflow-x-auto">
+      <table className="table w-full">
+        {/* head */}
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>treatment</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Payment</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings?.map((booking, i) => {
+            return (
+              <tr key={booking._id}>
+                <th>{i + 1}</th>
+                <td>{booking.patient}</td>
+                <td>{booking.treatment}</td>
+                <td>{booking.appointmentDate}</td>
+                <td>{booking.slot}</td>
+                <td>
+                  {booking.price && !booking.paid && (
+                    <Link to={`/dashboard/payment/${booking._id}`}>
+                      <button className="btn btn-primary text-white btn-sm">
+                        Pay
+                      </button>
+                    </Link>
+                  )}
+                  {booking.price && booking.paid && (
+                    <span className="text-success">Paid</span>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
-  );
+  </div>
+);
 };
 
 export default MyAppointment;

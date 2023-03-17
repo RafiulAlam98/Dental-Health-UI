@@ -2,10 +2,13 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React, { useEffect, useState } from "react";
 
 const CheckoutForm = ({ booking }) => {
-  const { price, patient, email } = booking;
+  const { price, patient, email, treatment } = booking;
   const [cardError, setCardError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [transactionId, setTransactionId] = useState("");
   const stripe = useStripe();
-  console.log(stripe);
+
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState("");
   useEffect(() => {
@@ -44,6 +47,8 @@ const CheckoutForm = ({ booking }) => {
     } else {
       setCardError("");
     }
+    setSuccess("");
+    setProcessing(true);
     const { paymentIntent, error: confirmError } =
       await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
@@ -59,8 +64,33 @@ const CheckoutForm = ({ booking }) => {
       setCardError(confirmError.message);
       return;
     } else {
-      console.log("paymentIntent", paymentIntent);
     }
+    if (paymentIntent.status === "succeeded") {
+      const paymentInfo = {
+        tId: paymentIntent.id,
+        amount: paymentIntent.amount,
+        patient,
+        email,
+      };
+
+      fetch("http://localhost:5000/payment", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify(paymentInfo),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.insertedId) {
+            setSuccess("Congrats! Your payment completed");
+            setTransactionId(paymentIntent.id);
+          }
+        });
+    }
+    setProcessing(false);
   };
 
   return (
@@ -86,12 +116,20 @@ const CheckoutForm = ({ booking }) => {
         <button
           className="btn btn-primary btn-sm mt-4 text-white"
           type="submit"
-          disabled={!stripe || !clientSecret}
+          disabled={!stripe || !clientSecret || processing}
         >
           Pay
         </button>
       </form>
       <p className="text-red-500">{cardError}</p>
+      {success && (
+        <div>
+          <p className="text-green-500">{success}</p>
+          <p>
+            Your transaction id: <strong>{transactionId}</strong>
+          </p>
+        </div>
+      )}
     </>
   );
 };
