@@ -12,14 +12,17 @@ const CheckoutForm = ({ booking }) => {
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState("");
   useEffect(() => {
-    fetch("http://localhost:5000/create-payment-intent", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `bearer ${localStorage.getItem("accessToken")}`,
-      },
-      body: JSON.stringify({ price }),
-    })
+    fetch(
+      "https://doctor-service-server-tau.vercel.app/create-payment-intent",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({ price }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setClientSecret(data.clientSecret);
@@ -74,7 +77,7 @@ const CheckoutForm = ({ booking }) => {
         bookingId: _id,
       };
 
-      fetch("http://localhost:5000/payment", {
+      fetch("https://doctor-service-server-tau.vercel.app/payment", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

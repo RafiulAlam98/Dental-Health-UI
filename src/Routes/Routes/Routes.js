@@ -79,7 +79,9 @@ const router = createBrowserRouter([
         path: "/dashboard/payment/:id",
         element: <Payment />,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/bookings/${params.id}`),
+          fetch(
+            `https://doctor-service-server-tau.vercel.app/bookings/${params.id}`
+          ),
       },
     ],
   },

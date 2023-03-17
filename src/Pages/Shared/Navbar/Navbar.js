@@ -20,9 +20,6 @@ const Navbar = () => {
       <li>
         <Link to="/appointment">Appointment</Link>
       </li>
-      <li>
-        <Link to="/about">About</Link>
-      </li>
 
       {user ? (
         <>

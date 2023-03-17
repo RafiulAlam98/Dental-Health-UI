@@ -11,12 +11,15 @@ const AllUsers = () => {
   } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/users", {
-        method: "GET",
-        headers: {
-          authorization: `bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const res = await fetch(
+        "https://doctor-service-server-tau.vercel.app/users",
+        {
+          method: "GET",
+          headers: {
+            authorization: `bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
       const data = res.json();
       return data;
     },
@@ -24,7 +27,7 @@ const AllUsers = () => {
 
   const handleMakeAdmin = (email) => {
     console.log(email);
-    fetch(`http://localhost:5000/users/admin/${email}`, {
+    fetch(`https://doctor-service-server-tau.vercel.app/users/admin/${email}`, {
       method: "PUT",
       headers: {
         authorization: `bearer ${localStorage.getItem("accessToken")}`,
@@ -42,7 +45,7 @@ const AllUsers = () => {
 
   const handleUserDelete = (id) => {
     console.log(id);
-    fetch(`http://localhost:5000/users/${id}`, {
+    fetch(`https://doctor-service-server-tau.vercel.app/users/${id}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",

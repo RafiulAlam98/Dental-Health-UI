@@ -18,12 +18,15 @@ const ManageDoctors = () => {
   } = useQuery({
     queryKey: ["doctors"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/doctors", {
-        method: "GET",
-        headers: {
-          authorization: `beare ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const res = await fetch(
+        "https://doctor-service-server-tau.vercel.app/doctors",
+        {
+          method: "GET",
+          headers: {
+            authorization: `beare ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
       const data = res.json();
       return data;
     },
@@ -33,12 +36,15 @@ const ManageDoctors = () => {
   }
 
   const handleDelete = (doctor) => {
-    fetch(`http://localhost:5000/doctors/${doctor.email}`, {
-      method: "DELETE",
-      headers: {
-        authorization: `bearer ${localStorage.getItem("accessToken")}`,
-      },
-    })
+    fetch(
+      `https://doctor-service-server-tau.vercel.app/doctors/${doctor.email}`,
+      {
+        method: "DELETE",
+        headers: {
+          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
