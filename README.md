@@ -9,9 +9,6 @@ The Dental Health Service is a web application built using the MERN (MongoDB, Ex
 ## Table of Contents
 
 - [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
 - [Technologies](#technologies)
 
 ## Features
